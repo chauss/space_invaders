@@ -21,10 +21,6 @@ class EnemyWave:
             spaced_enemy_height = new_enemy.image.get_height() + spacing
             new_enemy.positionY = border_padding[1] + spaced_enemy_height * enemy_lines_before
 
-            print(border_padding[0])
-            print((new_enemy.image.get_width() + spacing))
-            print(idx % enemies_per_line)
-
             self.enemies.append(new_enemy)
 
     def _calc_number_of_enemies_per_line(self, border_padding, enemy_min_spacing):
