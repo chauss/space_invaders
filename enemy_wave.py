@@ -4,8 +4,11 @@ from enemy import Enemy
 
 class EnemyWave:
     def __init__(self, number_of_enemies=30):
+        self.downMovement = 4
         self.enemies = []
         self.screen = pygame.display.get_surface()
+        self.speedX = 0
+        self.speedY = 0
 
         border_padding = (50, 50)
         enemies_per_line, spacing = self._calc_number_of_enemies_per_line(border_padding=border_padding,
@@ -15,13 +18,57 @@ class EnemyWave:
             new_enemy = Enemy()
             enemies_before_on_same_line = ((idx - 1) % enemies_per_line)
             spaced_enemy_width = new_enemy.image.get_width() + spacing
-            new_enemy.positionX = border_padding[0] + spaced_enemy_width * enemies_before_on_same_line
+            new_enemy.position_x = border_padding[0] + spaced_enemy_width * enemies_before_on_same_line
 
             enemy_lines_before = int((idx - 1) / enemies_per_line)
             spaced_enemy_height = new_enemy.image.get_height() + spacing
-            new_enemy.positionY = border_padding[1] + spaced_enemy_height * enemy_lines_before
+            new_enemy.position_y = border_padding[1] + spaced_enemy_height * enemy_lines_before
 
             self.enemies.append(new_enemy)
+
+    @property
+    def speed_x(self):
+        return self.speedX
+
+    @speed_x.setter
+    def speed_x(self, speed_x):
+        self.speedX = speed_x
+        for enemy in self.enemies:
+            enemy.speed_x = speed_x
+
+    @property
+    def speed_y(self):
+        return self.speedY
+
+    @speed_y.setter
+    def speed_y(self, speed_y):
+        self.speedY = speed_y
+        for enemy in self.enemies:
+            enemy.speed_y = speed_y
+
+    def move(self):
+        for enemy in self.enemies:
+            enemy.move()
+
+    def has_left_wall_collision(self):
+        for enemy in self.enemies:
+            if enemy.has_left_wall_collision():
+                return True
+        return False
+
+    def has_right_wall_collision(self):
+        for enemy in self.enemies:
+            if enemy.has_right_wall_collision():
+                return True
+        return False
+
+    def move_down(self):
+        for enemy in self.enemies:
+            enemy.position_y += self.downMovement
+
+    def draw(self):
+        for enemy in self.enemies:
+            enemy.draw()
 
     def _calc_number_of_enemies_per_line(self, border_padding, enemy_min_spacing):
         enemy_width = Enemy().image.get_width()
@@ -41,7 +88,3 @@ class EnemyWave:
         spacing = (space_for_enemies - enemies_per_line * enemy_width) / (enemies_per_line - 1)
 
         return enemies_per_line, spacing
-
-    def draw(self):
-        for enemy in self.enemies:
-            enemy.draw()
