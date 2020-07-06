@@ -52,6 +52,14 @@ class MovingObject:
     def speed_y(self, speed_y):
         self._speedY = speed_y
 
+    @property
+    def width(self):
+        return self.image.get_width()
+
+    @property
+    def height(self):
+        return self.image.get_height()
+
     def move(self):
         new_player_x = self._positionX + self._speedX
         self._positionX = min(max(new_player_x, self._screenBorders.left), self.screen.get_rect()[2] -
@@ -63,6 +71,27 @@ class MovingObject:
 
     def draw(self):
         self.screen.blit(self.image, (self.position_x, self.position_y))
+
+    def has_collision_with(self, moving_object, offset=0):
+        moving_object_top = moving_object.position_y
+        moving_object_left = moving_object.position_x
+        moving_object_right = moving_object.position_x + moving_object.width
+        moving_object_bottom = moving_object.position_y + moving_object.height
+
+        self_top = self.position_y
+        self_left = self.position_x
+        self_right = self.position_x + self.width
+        self_bottom = self.position_y + self.height
+
+        # If object are aside each other
+        if self_right <= moving_object_left + offset or self_left >= moving_object_right - offset:
+            return False
+
+        # If objects are above other
+        if self_bottom <= moving_object_top + offset or self_top >= moving_object_bottom - offset:
+            return False
+
+        return True
 
     def has_left_wall_collision(self):
         return self._positionX <= self._screenBorders.left

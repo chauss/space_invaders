@@ -3,11 +3,14 @@ from shot import Shot
 
 
 class ShotManager:
-    def __init__(self, speed=10):
+    def __init__(self, speed=10, max_shots=10):
         self.shotSpeed = speed
         self.shots = []
+        self.maxShots = max_shots
 
     def add_shot(self, for_player):
+        if len(self.shots) > self.maxShots:
+            return
         shot_left = bool(random.getrandbits(1))
 
         pos_x = for_player.position_x
@@ -23,6 +26,10 @@ class ShotManager:
         for shot in self.shots:
             shot.move()
         self.shots = [shot for shot in self.shots if shot.position_y + shot.image.get_height() > 0]
+
+    def remove(self, shots):
+        for shot in shots:
+            self.shots.remove(shot)
 
     def draw(self):
         for shot in self.shots:
