@@ -1,5 +1,6 @@
 import random
 from shot import Shot
+from pygame import mixer
 
 
 class ShotManager:
@@ -7,6 +8,8 @@ class ShotManager:
         self.shotSpeed = speed
         self.shots = []
         self.maxShots = max_shots
+        self.bulledSound = mixer.Sound("assets/laser.wav")
+        self.bulledSound.set_volume(0.05)
 
     def add_shot(self, for_player):
         if len(self.shots) > self.maxShots:
@@ -21,6 +24,7 @@ class ShotManager:
         new_shot = Shot(start_pos_x=pos_x, start_pos_y=pos_y)
         new_shot.speed_y = -self.shotSpeed
         self.shots.append(new_shot)
+        self.bulledSound.play()
 
     def move(self):
         for shot in self.shots:

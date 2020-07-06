@@ -2,10 +2,14 @@ import pygame
 from player import Player
 from enemy_wave import EnemyWave
 from shot_manager import ShotManager
+from pygame import mixer
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
+mixer.music.load("assets/background.wav")
+mixer.music.play(-1)
+mixer.music.set_volume(0.08)
 
 pygame.display.set_caption("Chris Space Invaders")
 icon = pygame.image.load("assets/space_ship.png")
